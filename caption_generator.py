@@ -63,6 +63,13 @@ def generate_desc(model, tokenizer, photo, max_length):
     return in_text
 
 
+def generate(app, photo_file):
+    import constants as const
+    # generate and return photo caption
+    return generate_desc(app.model, app.tokenizer, extract_features(photo_file), const.MAX_SEQ_LENGTH)
+
+
+
 if __name__ == '__main__':
     # load the tokenizer
     tokenizer = load(open('/Users/Faisal/Downloads/tokenizer.pkl', 'rb'))
