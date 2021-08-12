@@ -10,7 +10,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-static/uploads
+static/uploads/*.jpg
 env/
 build/
 develop-eggs/
