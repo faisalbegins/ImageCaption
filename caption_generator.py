@@ -1,20 +1,12 @@
-from pickle import load
 from numpy import argmax
 from keras.preprocessing.sequence import pad_sequences
-from keras.applications.vgg16 import VGG16
 from keras.preprocessing.image import load_img
 from keras.preprocessing.image import img_to_array
 from keras.applications.vgg16 import preprocess_input
-from keras.models import Model
-from keras.models import load_model
 
 
 # extract features from each photo in the directory
-def extract_features(filename):
-    # load the model
-    model = VGG16()
-    # re-structure the model
-    model = Model(inputs=model.inputs, outputs=model.layers[-2].output)
+def extract_features(pre_trained_model, filename):
     # load the photo
     image = load_img(filename, target_size=(224, 224))
     # convert the image pixels to a numpy array
@@ -24,7 +16,7 @@ def extract_features(filename):
     # prepare the image for the VGG model
     image = preprocess_input(image)
     # get features
-    feature = model.predict(image, verbose=0)
+    feature = pre_trained_model.predict(image, verbose=0)
     return feature
 
 
@@ -66,22 +58,8 @@ def generate_desc(model, tokenizer, photo, max_length):
 def generate(app, photo_file):
     import constants as const
     # generate and return photo caption
-    caption = generate_desc(app.model, app.tokenizer, extract_features(photo_file), const.MAX_SEQ_LENGTH)
+    image_features = extract_features(app.pre_trained_model, photo_file)
+    caption = generate_desc(app.model, app.tokenizer, image_features, const.MAX_SEQ_LENGTH)
     caption = caption.lstrip("startseq").rstrip("endseq").strip()
-    print(caption)
+    print(f"Predicted Caption: {caption}")
     return caption
-
-
-
-if __name__ == '__main__':
-    # load the tokenizer
-    tokenizer = load(open('/Users/Faisal/Downloads/tokenizer.pkl', 'rb'))
-    # pre-define the max sequence length (from training)
-    max_length = 34
-    # load the model
-    model = load_model('/Users/Faisal/Downloads/model_11.h5')
-    # load and prepare the photograph
-    photo = extract_features('/Users/Faisal/Downloads/example.jpg')
-    # generate description
-    description = generate_desc(model, tokenizer, photo, max_length)
-    print(description)
