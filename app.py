@@ -10,6 +10,8 @@ model_initializer.initialize(app)
 
 @app.route('/')
 def hello_world():
+    caption = generator.generate(app, '/Users/Faisal/Downloads/Flicker8k_Dataset/997722733_0cb5439472.jpg')
+    print(caption)
     return 'Hello World!'
 
 

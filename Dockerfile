@@ -1,15 +1,8 @@
 # base image
-FROM continuumio/miniconda3
+FROM python:3.8.2
 
-# project dependencies
-RUN conda install pandas
-RUN conda install seaborn
-RUN conda install -c conda-forge scikit-learn
-RUN conda install -c conda-forge matplotlib
-RUN conda install -c conda-forge scikit-surprise
-RUN conda install -c conda-forge flask
-RUN conda install -c conda-forge keras
-RUN conda install -c anaconda nltk
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt
 
 # create working directory
 WORKDIR /app
