@@ -66,7 +66,10 @@ def generate_desc(model, tokenizer, photo, max_length):
 def generate(app, photo_file):
     import constants as const
     # generate and return photo caption
-    return generate_desc(app.model, app.tokenizer, extract_features(photo_file), const.MAX_SEQ_LENGTH)
+    caption = generate_desc(app.model, app.tokenizer, extract_features(photo_file), const.MAX_SEQ_LENGTH)
+    caption = caption.lstrip("startseq").rstrip("endseq").strip()
+    print(caption)
+    return caption
 
 
 
